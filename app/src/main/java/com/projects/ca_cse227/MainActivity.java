@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer = new MediaPlayer();
     String URL = "https://firebasestorage.googleapis.com/v0/b/mangarx-68c33.appspot.com/o/jack_sparrow__remix_.mp3?alt=media&token=e3570a1d-838b-4969-ba1d-be3d2d2d453c";
     TextView textView;
-    private ProgressBar progressBar, totalTime;
+    SeekBar totalTime;
+    private ProgressBar progressBar;
     private ImageButton imageButton;
 
     @Override
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View view) {
                     if (mediaPlayer.isPlaying() && mediaPlayer != null) {
-                        imageButton.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_stop_24, null));
+                        imageButton.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_play_circle_outline_24, getTheme()));
                         mediaPlayer.stop();
                         mediaPlayer.reset();
                         totalTime.setProgress(mediaPlayer.getCurrentPosition());
@@ -83,6 +85,29 @@ public class MainActivity extends AppCompatActivity {
                         } else {
                             Toast.makeText(MainActivity.this, "No Internet Connection", Toast.LENGTH_SHORT).show();
                         }
+                    }
+                }
+            });
+            totalTime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+                @Override
+                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                    int x = (int) Math.ceil(i / 1000f);
+
+                    if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
+                        MainActivity.this.totalTime.setProgress(x);
+                    }
+
+                }
+
+                @Override
+                public void onStartTrackingTouch(SeekBar seekBar) {
+                    Log.d(TAG, "onStartTrackingTouch: " + seekBar.getProgress());
+                }
+
+                @Override
+                public void onStopTrackingTouch(SeekBar seekBar) {
+                    if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+                        mediaPlayer.seekTo(seekBar.getProgress());
                     }
                 }
             });
@@ -218,10 +243,11 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onPrepared(MediaPlayer mediaPlayer) {
                     totalTime.setMax(mediaPlayer.getDuration());
+                    totalTime.setProgress(0);
                     Log.d(TAG, "onPrepared: totalTime max=" + totalTime.getMax() + " " + totalTime.getProgress());
                     textView.setText("Done!!");
                     mediaPlayer.start();
-                    imageButton.setBackgroundResource(R.drawable.ic_baseline_stop_24);
+                    imageButton.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_stop_24, getTheme()));
 
                 }
             });
