@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
                         imageButton.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_play_circle_outline_24, getTheme()));
                         mediaPlayer.stop();
                         mediaPlayer.reset();
+                        textView.setText(R.string.play);
                     } else {
                         if (isNetworkAvailable()) {
                             Log.d(TAG, "onClick: Network " + isNetworkAvailable());

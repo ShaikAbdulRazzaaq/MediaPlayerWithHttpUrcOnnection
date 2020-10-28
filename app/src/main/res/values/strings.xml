@@ -2,7 +2,8 @@
     <string name="app_name">CA_CSE227</string>
     <string name="play_pause_icon">Play_Pause_Icon</string>
     <string name="download_music">Download Music</string>
-    <string name="press_play_button_to_download_video">Press Play Button to download video</string>
+    <string name="press_play_button_to_download_video">Press Play Button to download song</string>
     <string name="done">Done!!</string>
-    <string name="buffering">Buffering...</string>
+    <string name="buffering">Buffering…</string>
+    <string name="play">Press Play Button to download song</string>
 </resources>
