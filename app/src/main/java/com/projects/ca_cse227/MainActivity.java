@@ -116,7 +116,6 @@ public class MainActivity extends AppCompatActivity {
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
                 PackageManager.PERMISSION_GRANTED)) {
             // permission already granted
-            boolean flag = true;
         } else {
             // requesting permission using request code 1
             ActivityCompat.requestPermissions(this, new String[]{
