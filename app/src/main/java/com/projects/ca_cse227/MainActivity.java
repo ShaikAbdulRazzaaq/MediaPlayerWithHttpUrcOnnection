@@ -17,7 +17,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,7 +38,6 @@ public class MainActivity extends AppCompatActivity {
     MediaPlayer mediaPlayer = new MediaPlayer();
     String URL = "https://firebasestorage.googleapis.com/v0/b/mangarx-68c33.appspot.com/o/jack_sparrow__remix_.mp3?alt=media&token=e3570a1d-838b-4969-ba1d-be3d2d2d453c";
     TextView textView;
-    SeekBar totalTime;
     private ProgressBar progressBar;
     private ImageButton imageButton;
 
@@ -56,7 +54,6 @@ public class MainActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         imageButton = findViewById(R.id.playPause);
         textView = findViewById(R.id.title);
-        totalTime = findViewById(R.id.player);
         progressBar.setVisibility(View.GONE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             mediaPlayer.setAudioAttributes(
@@ -73,41 +70,13 @@ public class MainActivity extends AppCompatActivity {
                         imageButton.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_play_circle_outline_24, getTheme()));
                         mediaPlayer.stop();
                         mediaPlayer.reset();
-                        totalTime.setProgress(mediaPlayer.getCurrentPosition());
                     } else {
                         if (isNetworkAvailable()) {
                             Log.d(TAG, "onClick: Network " + isNetworkAvailable());
-                            try {
-                                downloadFile(URL);
-                            } catch (MalformedURLException e) {
-                                e.printStackTrace();
-                            }
+                            downloadFile(URL);
                         } else {
                             Toast.makeText(MainActivity.this, "No Internet Connection", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                }
-            });
-            totalTime.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
-                    int x = (int) Math.ceil(i / 1000f);
-
-                    if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
-                        MainActivity.this.totalTime.setProgress(x);
-                    }
-
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                    Log.d(TAG, "onStartTrackingTouch: " + seekBar.getProgress());
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    if (mediaPlayer != null && mediaPlayer.isPlaying()) {
-                        mediaPlayer.seekTo(seekBar.getProgress());
                     }
                 }
             });
@@ -116,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void downloadFile(String url) throws MalformedURLException {
+    private void downloadFile(String url) {
         Log.d(TAG, "downloadFile: " + url);
 
         new Media_Player().execute(url);
@@ -139,9 +108,9 @@ public class MainActivity extends AppCompatActivity {
         checkWritePermission();
     }
 
-    /*
-    Function to check the write permission
-     */
+
+    //Function to check the write permission
+
     void checkWritePermission() {
         if ((ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
@@ -224,7 +193,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            textView.setText("Buffering...");
+            textView.setText(R.string.buffering);
             progressBar.setVisibility(View.VISIBLE);
         }
 
@@ -241,14 +210,10 @@ public class MainActivity extends AppCompatActivity {
             mediaPlayer.prepareAsync();
             mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
-                public void onPrepared(MediaPlayer mediaPlayer) {
-                    totalTime.setMax(mediaPlayer.getDuration());
-                    totalTime.setProgress(0);
-                    Log.d(TAG, "onPrepared: totalTime max=" + totalTime.getMax() + " " + totalTime.getProgress());
-                    textView.setText("Done!!");
+                public void onPrepared(final MediaPlayer mediaPlayer) {
+                    textView.setText(R.string.done);
                     mediaPlayer.start();
                     imageButton.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_baseline_stop_24, getTheme()));
-
                 }
             });
         }

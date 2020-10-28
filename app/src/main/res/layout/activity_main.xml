@@ -18,18 +18,20 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="12dp"
         app:cardElevation="8dp"
         app:cardUseCompatPadding="true"
         app:contentPadding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <RelativeLayout
             android:id="@+id/relativeLayout"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -38,24 +40,19 @@
 
             <TextView
                 android:id="@+id/title"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:gravity="center"
                 android:text="@string/press_play_button_to_download_video"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
 
-            <SeekBar
-                android:id="@+id/player"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/title"
-                android:layout_margin="16dp"
-                android:indeterminate="false" />
 
             <ImageButton
                 android:id="@+id/playPause"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/player"
+                android:layout_below="@+id/title"
                 android:layout_centerHorizontal="true"
                 android:background="#fff"
                 android:contentDescription="@string/play_pause_icon"
