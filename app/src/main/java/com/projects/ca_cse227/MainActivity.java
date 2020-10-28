@@ -2,7 +2,6 @@ package com.projects.ca_cse227;
 
 import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -32,6 +31,8 @@ import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
@@ -112,12 +113,10 @@ public class MainActivity extends AppCompatActivity {
     //Function to check the write permission
 
     void checkWritePermission() {
-        if ((ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE) ==
-                PackageManager.PERMISSION_GRANTED)) {
-            // permission already granted
-        } else {
-            // requesting permission using request code 1
+        if (PERMISSION_GRANTED == ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE)) {// permission already granted
+            Log.d(TAG, "checkWritePermission: Permission Already granted");
+        } else {// requesting permission using request code 1
             ActivityCompat.requestPermissions(this, new String[]{
                     Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
         }
@@ -130,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
         // if the request code matches
         if (requestCode == 1) {
             // checking permissions array
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.length > 0 && grantResults[0] == PERMISSION_GRANTED) {
                 // if denied calling that function again
                 checkWritePermission();
             } else {
